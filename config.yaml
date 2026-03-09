@@ -1,0 +1,10 @@
+gcp:
+  project_id: "proyectofinal-mu-or-se"
+  region: "us-central1"
+  bucket_temp: "proyectofinal-mu-or-se-beam-bucket"
+pubsub:
+  topic_id: "robots-stream"
+  subscription_id: "robots-sub"
+bigquery:
+  dataset: "robot_analytics"
+  table: "telemetria"
