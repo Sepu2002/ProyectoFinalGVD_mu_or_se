@@ -35,7 +35,9 @@ El proyecto cumple con las mejores prácticas de configuración e implementa arc
 │
 └── /procesamiento          
     └── pipeline.py         # Job de Apache Beam (Dataflow) para transformación en streaming
-'''
+
+```
+
 ## 💡 Valor Comercial y Casos de Uso
 El procesamiento de telemetría en tiempo real no es solo un reto técnico, sino una ventaja competitiva. Esta arquitectura permite:
 * **Mantenimiento Predictivo:** Monitoreo en vivo de la temperatura del CPU y niveles de batería para evitar fallas mecánicas en operación.
@@ -43,14 +45,14 @@ El procesamiento de telemetría en tiempo real no es solo un reto técnico, sino
 * **Escalabilidad Operativa:** Capacidad de gestionar flotas de cientos de robots simultáneamente sin saturar los servidores, gracias al desacoplamiento de la ingesta y el procesamiento.
 
 ## 🛠️ Justificación de Servicios GCP
-[cite_start]Para cumplir con los requerimientos de Cloud Computing y Ciencia de Datos [cite: 4][cite_start], se seleccionaron las siguientes herramientas administradas de GCP:
+Para cumplir con los requerimientos de Cloud Computing y Ciencia de Datos, se seleccionaron las siguientes herramientas administradas de GCP:
 * **Cloud Functions:** Se utiliza como un endpoint serverless (`main.py`) altamente escalable para recibir los payloads HTTP de los robots, cobrando solo por milisegundo de ejecución.
 * **Cloud Pub/Sub:** Actúa como el amortiguador (buffer) principal (`robots-stream`). Desacopla la ingesta rápida del procesamiento analítico, garantizando que no se pierdan paquetes (cero pérdida de datos) durante picos de tráfico extremo.
 * **Cloud Dataflow (Apache Beam):** Permite el procesamiento continuo en modo *streaming* puro (`pipeline.py`). Transforma y limpia los datos en tiempo real antes de almacenarlos.
 * **BigQuery:** Seleccionado como Data Warehouse (`robot_analytics.telemetria`) por su capacidad nativa de ingestar datos en streaming e integrarse nativamente con Looker Studio para visualización en vivo.
 
 ## 🚀 Desafíos Técnicos Resueltos
-[cite_start]Durante el desarrollo, abordamos retos de alta dificultad técnica:
+Durante el desarrollo, abordamos retos de alta dificultad técnica:
 1. **Garantía de Entrega (Streaming):** En la Cloud Function (`main.py`), implementamos una espera síncrona (`future.result()`) sobre la publicación asíncrona de Pub/Sub. Esto garantiza que el frontend solo reciba un "HTTP 200 OK" si el mensaje fue persistido exitosamente en el bus de mensajes.
 2. **Pruebas de Estrés y Alta Velocidad:** Para validar la arquitectura, no nos limitamos a la interfaz web. Se desarrolló un inyector gRPC (`robot_directo.py`) que publica ráfagas de alta velocidad de forma asíncrona, simulando el comportamiento de una flota robótica masiva bajo estrés.
 
@@ -61,8 +63,9 @@ El procesamiento de telemetría en tiempo real no es solo un reto técnico, sino
 * Python 3.9+ instalado.
 
 ### 2. Instalación
-[cite_start]Clona el repositorio e instala las dependencias necesarias[cite: 96]:
+Clona el repositorio e instala las dependencias necesarias:
 ```bash
 git clone [https://github.com/Sepu2002/ProyectoFinalGVD_mu_or_se.git](https://github.com/Sepu2002/ProyectoFinalGVD_mu_or_se.git)
 cd ProyectoFinalGVD_mu_or_se
 pip install -r requirements.txt
+```
