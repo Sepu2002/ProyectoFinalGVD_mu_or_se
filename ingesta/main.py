@@ -1,4 +1,4 @@
-import jso
+import json
 import os
 from google.cloud import pubsub_v1
 import functions_framework
