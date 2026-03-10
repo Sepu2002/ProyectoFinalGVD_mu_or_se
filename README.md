@@ -35,7 +35,7 @@ El proyecto cumple con las mejores prácticas de configuración e implementa arc
 │
 └── /procesamiento          
     └── pipeline.py         # Job de Apache Beam (Dataflow) para transformación en streaming
-
+'''
 ## 💡 Valor Comercial y Casos de Uso
 El procesamiento de telemetría en tiempo real no es solo un reto técnico, sino una ventaja competitiva. Esta arquitectura permite:
 * **Mantenimiento Predictivo:** Monitoreo en vivo de la temperatura del CPU y niveles de batería para evitar fallas mecánicas en operación.
