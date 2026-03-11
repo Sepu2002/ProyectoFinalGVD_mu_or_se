@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama de Arquitectura GCP</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            margin: 0;
+        }
+        h1 {
+            color: #202124;
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+        p.subtitle {
+            color: #5f6368;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .diagram-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 1100px;
+            overflow-x: auto;
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Pipeline de Streaming GCP</h1>
+    <p class="subtitle">Flujo de datos de extremo a extremo para telemetría robótica</p>
+
+    <div class="diagram-container">
+        <!-- El bloque "mermaid" es detectado y dibujado automáticamente por la librería js -->
+        <pre class="mermaid">
+graph LR
+    %% Definición de Estilos
+    classDef frontend fill:#2b303a,stroke:#00ff00,stroke-width:2px,color:#fff;
+    classDef serverless fill:#4285f4,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef pubsub fill:#ea4335,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef dataflow fill:#fbbc05,stroke:#fff,stroke-width:2px,color:#000;
+    classDef bq fill:#34a853,stroke:#fff,stroke-width:2px,color:#fff;
+    classDef bi fill:#185abc,stroke:#fff,stroke-width:2px,color:#fff;
+
+    %% Nodos y Agrupaciones
+    subgraph C1 ["Capa 1: Fuentes de Datos"]
+        A[📱 WebApp Interactiva<br/>GitHub Pages]:::frontend
+        B[🤖 Simulador IoT<br/>Script gRPC]:::frontend
+    end
+
+    subgraph C2 ["Capa 2: Ingesta"]
+        C[⚡ Cloud Function<br/>main.py]:::serverless
+    end
+
+    subgraph C3 ["Capa 3: Mensajería (Buffer)"]
+        D[📮 Cloud Pub/Sub<br/>Topic: robots-stream]:::pubsub
+        D2[📥 Suscripción<br/>robots-sub]:::pubsub
+    end
+
+    subgraph C4 ["Capa 4: Procesamiento Streaming"]
+        E[⚙️ Cloud Dataflow<br/>Apache Beam]:::dataflow
+    end
+
+    subgraph C5 ["Capa 5: Almacenamiento"]
+        F[🗄️ BigQuery<br/>Tabla: telemetria]:::bq
+    end
+
+    subgraph C6 ["Capa 6: Visualización"]
+        G[📊 Looker Studio<br/>Live Dashboard]:::bi
+    end
+
+    %% Conexiones y Flujo de Datos
+    A -- "HTTP POST (JSON)" --> C
+    C -- "Pub/Sub API (Sync)" --> D
+    B -- "gRPC (Alta Velocidad)" --> D
+    
+    D --> D2
+    D2 -- "Streaming Pull" --> E
+    
+    E -- "Write_Append" --> F
+    F -- "Live Query" --> G
+        </pre>
+    </div>
+
+    <!-- Importar la librería de Mermaid de forma dinámica -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+    </script>
+</body>
+</html>
